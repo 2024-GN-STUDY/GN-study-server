@@ -1,2 +1,0 @@
-# GN-study-server
-server
