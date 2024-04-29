@@ -5,6 +5,7 @@ import GN.study.user.dto.ResponseUserDto;
 import GN.study.user.entity.User;
 import GN.study.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -17,10 +18,14 @@ import java.util.stream.Collectors;
 public class UserService {
 
     private final UserRepository userRepository;
+    private final BCryptPasswordEncoder bCryptPasswordEncoder;
 
 
     @Transactional
     public ResponseUserDto createUser(RequestUserDto requestUserDto){
+
+        // 비밀번호 암호화
+        requestUserDto.setPassword(bCryptPasswordEncoder.encode(requestUserDto.getPassword()));
 
         User user = RequestUserDto.toEntity(requestUserDto);
 
