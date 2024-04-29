@@ -4,16 +4,17 @@ import GN.study.user.entity.User;
 import lombok.*;
 
 @Getter @Setter
-@RequiredArgsConstructor
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class RequestUserDto {
 
-    private final Long id;
+    private Long id;
 
-    private final String name;
+    private String name;
 
-    private final String password;
+    private String password;
 
-    @Builder
     public static User toEntity(RequestUserDto requestUserDto){
         return User.builder()
                 .id(requestUserDto.getId())

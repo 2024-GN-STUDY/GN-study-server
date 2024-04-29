@@ -13,10 +13,8 @@ import java.time.LocalDateTime;
 @Entity
 @Table(name = "Users")
 @Getter
-@NoArgsConstructor(access = AccessLevel.PUBLIC)
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class User {
-
-
 
     @Id
     @Column(name = "user_id", nullable = false)     // nullable : false -> not null

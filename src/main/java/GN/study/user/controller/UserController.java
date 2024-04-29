@@ -35,8 +35,8 @@ public class UserController {
     }
 
     @GetMapping("/")
-    public ResponseEntity<List<ResponseUserDto>> findByAllUsers(){
-        return ResponseEntity.ok(userService.findByAll());
+    public ResponseEntity<List<ResponseUserDto>> findAllUsers(){
+        return ResponseEntity.ok(userService.findAll());
     }
 
 

@@ -28,7 +28,7 @@ public class UserService {
     }
 
     @Transactional
-    public List<ResponseUserDto> findByAll(){
+    public List<ResponseUserDto> findAll(){
 
         return userRepository.findAll().stream().map(ResponseUserDto::toDto).collect(Collectors.toList());
     }

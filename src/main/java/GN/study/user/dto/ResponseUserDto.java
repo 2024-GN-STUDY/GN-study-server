@@ -4,14 +4,14 @@ import GN.study.user.entity.User;
 import lombok.*;
 
 @Getter @Setter
-@RequiredArgsConstructor
+@AllArgsConstructor
+@Builder
 public class ResponseUserDto {
 
-    private final Long id;
+    private Long id;
 
-    private final String name;
+    private String name;
 
-    @Builder
     public static ResponseUserDto toDto(User user){
         return new ResponseUserDto(user.getId(), user.getName());
     }
