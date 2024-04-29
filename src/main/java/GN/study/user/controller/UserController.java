@@ -22,6 +22,7 @@ public class UserController {
 
     @PostMapping("/")
     public ResponseEntity<ResponseUserDto> createUser(@RequestBody RequestUserDto requestUserDto){
+
         ResponseUserDto responseUserDto = userService.createUser(requestUserDto);
 
         // hateoas 적용

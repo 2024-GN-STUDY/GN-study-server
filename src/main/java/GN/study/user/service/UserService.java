@@ -3,6 +3,7 @@ package GN.study.user.service;
 import GN.study.user.dto.RequestUserDto;
 import GN.study.user.dto.ResponseUserDto;
 import GN.study.user.entity.User;
+import GN.study.user.mapper.UserMapper;
 import GN.study.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -19,22 +20,29 @@ public class UserService {
 
     private final UserRepository userRepository;
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
-
+    private final UserMapper userMapper;
 
     @Transactional
     public ResponseUserDto createUser(RequestUserDto requestUserDto){
 
         // 비밀번호 암호화
-        requestUserDto.setPassword(bCryptPasswordEncoder.encode(requestUserDto.getPassword()));
+        RequestUserDto reqDto = RequestUserDto.builder()
+                .id(requestUserDto.getId())
+                .name(requestUserDto.getName())
+                .password(bCryptPasswordEncoder.encode(requestUserDto.getPassword()))
+                .build();
 
-        User user = RequestUserDto.toEntity(requestUserDto);
+        //MapStruct 사용 requestUserDto -> User Entity 로 변경
+        User user = userRepository.save(userMapper.toEntity(reqDto));
 
-        return ResponseUserDto.toDto(userRepository.save(user));
+        return userMapper.toDto(user);
     }
 
-    @Transactional
+    @Transactional(readOnly = true)
     public List<ResponseUserDto> findAll(){
 
-        return userRepository.findAll().stream().map(ResponseUserDto::toDto).collect(Collectors.toList());
+        return userRepository.findAll().stream()
+                .map(userMapper::toDto)
+                .collect(Collectors.toList());
     }
 }
