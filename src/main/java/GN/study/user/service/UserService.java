@@ -8,6 +8,9 @@ import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 @Service
 @RequiredArgsConstructor
 public class UserService {
@@ -17,8 +20,13 @@ public class UserService {
 
     public ResponseUserDto createUser(RequestUserDto requestUserDto){
 
-        User user = requestUserDto.toEntity(requestUserDto);
+        User user = RequestUserDto.toEntity(requestUserDto);
 
         return ResponseUserDto.toDto(userRepository.save(user));
+    }
+
+    public List<ResponseUserDto> findByAll(){
+
+        return userRepository.findAll().stream().map(ResponseUserDto::toDto).collect(Collectors.toList());
     }
 }

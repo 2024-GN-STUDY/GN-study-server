@@ -1,26 +1,19 @@
 package GN.study.user.dto;
 
 import GN.study.user.entity.User;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.RequiredArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
-@Getter
-@Setter
-@Builder
+@Getter @Setter
 @RequiredArgsConstructor
 public class ResponseUserDto {
 
-    private Long id;
+    private final Long id;
 
-    private String name;
+    private final String name;
 
+    @Builder
     public static ResponseUserDto toDto(User user){
-        return ResponseUserDto.builder()
-                .id(user.getId())
-                .name(user.getName())
-                .build();
+        return new ResponseUserDto(user.getId(), user.getName());
     }
 
 }

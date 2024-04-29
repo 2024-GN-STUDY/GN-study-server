@@ -2,21 +2,41 @@ package GN.study.user.controller;
 
 import GN.study.user.dto.RequestUserDto;
 import GN.study.user.dto.ResponseUserDto;
+import GN.study.user.entity.User;
 import GN.study.user.service.UserService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.context.annotation.ComponentScan;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
+
+import java.net.URI;
+import java.util.List;
 
 @RestController
+@RequestMapping("/users")
 @RequiredArgsConstructor
 public class UserController {
 
     private final UserService userService;
 
-    @PostMapping("/user")
-    public ResponseEntity<ResponseUserDto> createUser(RequestUserDto requestUserDto){
-        return ResponseEntity.ok(userService.createUser(requestUserDto));
+    @PostMapping("/")
+    public ResponseEntity<ResponseUserDto> createUser(@RequestBody RequestUserDto requestUserDto){
+        ResponseUserDto responseUserDto = userService.createUser(requestUserDto);
+
+        // hateoas 적용
+        URI location = ServletUriComponentsBuilder
+                .fromCurrentContextPath()
+                .path("/" + responseUserDto.getId())
+                .buildAndExpand()
+                .toUri();
+
+        return ResponseEntity.created(location).body(responseUserDto);
+    }
+
+    @GetMapping("/")
+    public ResponseEntity<List<ResponseUserDto>> findByAllUsers(){
+        return ResponseEntity.ok(userService.findByAll());
     }
 
 
