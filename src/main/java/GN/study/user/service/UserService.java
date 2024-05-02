@@ -2,6 +2,7 @@ package GN.study.user.service;
 
 import GN.study.user.dto.RequestUserDto;
 import GN.study.user.dto.ResponseUserDto;
+import GN.study.user.entity.Role;
 import GN.study.user.entity.User;
 import GN.study.user.mapper.UserMapper;
 import GN.study.user.repository.UserRepository;
@@ -38,6 +39,7 @@ public class UserService {
                 .name(requestUserDto.getName())
                 .password(bCryptPasswordEncoder.encode(requestUserDto.getPassword()))
                 .email(requestUserDto.getEmail())
+                .role(Role.USER)
                 .build();
 
         //MapStruct 사용 requestUserDto -> User Entity 로 변경

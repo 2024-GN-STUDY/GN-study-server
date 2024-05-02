@@ -27,11 +27,16 @@ public class User {
     @Column(nullable = false)
     private String email;
 
+    @Column(nullable = false)
+    @Enumerated(EnumType.STRING)
+    private Role role;
+
     @Builder
-    public User(Long id, String name, String password, String email) {
+    public User(Long id, String name, String password, String email, Role role) {
         this.id = id;
         this.name = name;
         this.password = password;
         this.email = email;
+        this.role = role;
     }
 }
