@@ -4,6 +4,7 @@ import GN.study.user.dto.RequestUserDto;
 import GN.study.user.dto.ResponseUserDto;
 import GN.study.user.entity.User;
 import GN.study.user.service.UserService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.http.ResponseEntity;
@@ -21,7 +22,7 @@ public class UserController {
     private final UserService userService;
 
     @PostMapping("/")
-    public ResponseEntity<ResponseUserDto> createUser(@RequestBody RequestUserDto requestUserDto){
+    public ResponseEntity<ResponseUserDto> createUser(@Valid @RequestBody RequestUserDto requestUserDto){
 
         ResponseUserDto responseUserDto = userService.createUser(requestUserDto);
 

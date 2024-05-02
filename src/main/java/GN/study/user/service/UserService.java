@@ -25,6 +25,13 @@ public class UserService {
     @Transactional
     public ResponseUserDto createUser(RequestUserDto requestUserDto){
 
+        User validUser = userRepository.findByName(requestUserDto.getName());
+
+        // 중복 체크
+        if(validUser != null){
+            throw new RuntimeException("Already exist user");
+        }
+
         // 비밀번호 암호화
         User user = User.builder()
                 .id(requestUserDto.getId())
