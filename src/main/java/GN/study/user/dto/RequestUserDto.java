@@ -1,6 +1,6 @@
 package GN.study.user.dto;
 
-import GN.study.user.entity.User;
+import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 import lombok.*;
@@ -16,5 +16,9 @@ public class RequestUserDto {
     private String name;
 
     private String password;
+
+    @NotBlank
+    @Email
+    private String email;
 
 }

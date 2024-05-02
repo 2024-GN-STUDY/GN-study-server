@@ -25,7 +25,7 @@ public class UserService {
     @Transactional
     public ResponseUserDto createUser(RequestUserDto requestUserDto){
 
-        User validUser = userRepository.findByName(requestUserDto.getName());
+        User validUser = userRepository.findByEmail(requestUserDto.getEmail());
 
         // 중복 체크
         if(validUser != null){
@@ -37,6 +37,7 @@ public class UserService {
                 .id(requestUserDto.getId())
                 .name(requestUserDto.getName())
                 .password(bCryptPasswordEncoder.encode(requestUserDto.getPassword()))
+                .email(requestUserDto.getEmail())
                 .build();
 
         //MapStruct 사용 requestUserDto -> User Entity 로 변경
