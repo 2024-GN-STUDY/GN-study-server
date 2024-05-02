@@ -26,16 +26,14 @@ public class UserService {
     public ResponseUserDto createUser(RequestUserDto requestUserDto){
 
         // 비밀번호 암호화
-        RequestUserDto reqDto = RequestUserDto.builder()
+        User user = User.builder()
                 .id(requestUserDto.getId())
                 .name(requestUserDto.getName())
                 .password(bCryptPasswordEncoder.encode(requestUserDto.getPassword()))
                 .build();
 
         //MapStruct 사용 requestUserDto -> User Entity 로 변경
-        User user = userRepository.save(userMapper.toEntity(reqDto));
-
-        return userMapper.toDto(user);
+        return userMapper.toDto(userRepository.save(user));
     }
 
     @Transactional(readOnly = true)
