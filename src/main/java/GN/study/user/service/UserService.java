@@ -4,6 +4,8 @@ import GN.study.user.dto.RequestUserDto;
 import GN.study.user.dto.ResponseUserDto;
 import GN.study.user.entity.Role;
 import GN.study.user.entity.User;
+import GN.study.user.exception.UserExistException;
+import GN.study.user.exception.UserNotFoundException;
 import GN.study.user.mapper.UserMapper;
 import GN.study.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -30,7 +32,7 @@ public class UserService {
 
         // 중복 체크
         if(validUser != null){
-            throw new RuntimeException("Already exist user");
+            throw new UserExistException();
         }
 
         // 비밀번호 암호화

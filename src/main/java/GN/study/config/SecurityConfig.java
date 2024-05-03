@@ -19,6 +19,13 @@ import org.springframework.web.servlet.handler.HandlerMappingIntrospector;
 @EnableWebSecurity
 public class SecurityConfig {
 
+    public final String[] PERMIT_URL(){
+        return new String[]{
+                "/api/users/",
+                "/error"
+        };
+    }
+
     @Bean
     @ConditionalOnProperty(name = "spring.h2.console.enabled", havingValue = "true")
     public WebSecurityCustomizer webSecurityCustomizer(){
@@ -31,7 +38,7 @@ public class SecurityConfig {
         http
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(req -> req
-                        .requestMatchers("/api/users/").permitAll()
+                        .requestMatchers(PERMIT_URL()).permitAll()
                         .requestMatchers("/").hasRole(Role.USER.name())
                 )
                 // X-Frame-Options 브라우저에서 iframe 에서 일어난 요청에 대해 origin 을 파악하고 요청 허용함
