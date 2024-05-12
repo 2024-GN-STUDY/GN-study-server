@@ -1,12 +1,10 @@
 package GN.study.user.controller;
 
-import GN.study.user.dto.RequestUserDto;
-import GN.study.user.dto.ResponseUserDto;
-import GN.study.user.entity.User;
+import GN.study.user.dto.RequestUserSignDto;
+import GN.study.user.dto.ResponseUserSignDto;
 import GN.study.user.service.UserService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.context.annotation.ComponentScan;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
@@ -21,23 +19,23 @@ public class UserController {
 
     private final UserService userService;
 
-    @PostMapping("/")
-    public ResponseEntity<ResponseUserDto> createUser(@Valid @RequestBody RequestUserDto requestUserDto){
+    @PostMapping
+    public ResponseEntity<ResponseUserSignDto> createUser(@Valid @RequestBody RequestUserSignDto requestUserSignDto){
 
-        ResponseUserDto responseUserDto = userService.createUser(requestUserDto);
+        ResponseUserSignDto responseUserSignDto = userService.createUser(requestUserSignDto);
 
         // hateoas 적용
         URI location = ServletUriComponentsBuilder
                 .fromCurrentContextPath()
-                .path("/" + responseUserDto.getId())
+                .path("/" + responseUserSignDto.getId())
                 .buildAndExpand()
                 .toUri();
 
-        return ResponseEntity.created(location).body(responseUserDto);
+        return ResponseEntity.created(location).body(responseUserSignDto);
     }
 
-    @GetMapping("/")
-    public ResponseEntity<List<ResponseUserDto>> findAllUsers(){
+    @GetMapping
+    public ResponseEntity<List<ResponseUserSignDto>> findAllUsers(){
         return ResponseEntity.ok(userService.findAll());
     }
 

@@ -1,11 +1,11 @@
 package GN.study.user.service;
 
-import GN.study.user.dto.RequestUserDto;
-import GN.study.user.dto.ResponseUserDto;
+import GN.study.user.dto.RequestUserSignDto;
+import GN.study.user.dto.ResponseUserSignDto;
+import GN.study.user.entity.Address;
 import GN.study.user.entity.Role;
 import GN.study.user.entity.User;
 import GN.study.user.exception.UserExistException;
-import GN.study.user.exception.UserNotFoundException;
 import GN.study.user.mapper.UserMapper;
 import GN.study.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -26,9 +26,9 @@ public class UserService {
     private final UserMapper userMapper;
 
     @Transactional
-    public ResponseUserDto createUser(RequestUserDto requestUserDto){
+    public ResponseUserSignDto createUser(RequestUserSignDto requestUserSignDto){
 
-        User validUser = userRepository.findByEmail(requestUserDto.getEmail());
+        User validUser = userRepository.findByEmail(requestUserSignDto.getEmail());
 
         // 중복 체크
         if(validUser != null){
@@ -37,11 +37,11 @@ public class UserService {
 
         // 비밀번호 암호화
         User user = User.builder()
-                .id(requestUserDto.getId())
-                .name(requestUserDto.getName())
-                .password(bCryptPasswordEncoder.encode(requestUserDto.getPassword()))
-                .email(requestUserDto.getEmail())
+                .name(requestUserSignDto.getName())
+                .password(bCryptPasswordEncoder.encode(requestUserSignDto.getPassword()))
+                .email(requestUserSignDto.getEmail())
                 .role(Role.USER)
+                .address(new Address(requestUserSignDto.getBaseAddr(), requestUserSignDto.getDetailAddr()))
                 .build();
 
         //MapStruct 사용 requestUserDto -> User Entity 로 변경
@@ -49,7 +49,7 @@ public class UserService {
     }
 
     @Transactional(readOnly = true)
-    public List<ResponseUserDto> findAll(){
+    public List<ResponseUserSignDto> findAll(){
 
         return userRepository.findAll().stream()
                 .map(userMapper::toDto)

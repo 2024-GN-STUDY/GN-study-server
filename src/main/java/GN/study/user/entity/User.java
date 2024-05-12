@@ -1,11 +1,7 @@
 package GN.study.user.entity;
 
-import GN.study.user.dto.RequestUserDto;
 import jakarta.persistence.*;
 import lombok.*;
-import org.antlr.v4.runtime.misc.NotNull;
-
-import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "Users")
@@ -31,12 +27,17 @@ public class User {
     @Enumerated(EnumType.STRING)
     private Role role;
 
+    @Embedded
+    private Address address;
+
     @Builder
-    public User(Long id, String name, String password, String email, Role role) {
+    public User(Long id, String name, String password, String email, Role role, Address address) {
         this.id = id;
         this.name = name;
         this.password = password;
         this.email = email;
         this.role = role;
+        this.address = address;
     }
+
 }
