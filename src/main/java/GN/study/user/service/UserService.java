@@ -1,7 +1,7 @@
 package GN.study.user.service;
 
-import GN.study.user.dto.RequestUserSignDto;
-import GN.study.user.dto.ResponseUserSignDto;
+import GN.study.user.dto.RequestUserSignUpDto;
+import GN.study.user.dto.ResponseUserSignUpDto;
 import GN.study.user.entity.Address;
 import GN.study.user.entity.Role;
 import GN.study.user.entity.User;
@@ -26,9 +26,9 @@ public class UserService {
     private final UserMapper userMapper;
 
     @Transactional
-    public ResponseUserSignDto createUser(RequestUserSignDto requestUserSignDto){
+    public ResponseUserSignUpDto createUser(RequestUserSignUpDto requestUserSignUpDto){
 
-        User validUser = userRepository.findByEmail(requestUserSignDto.getEmail());
+        User validUser = userRepository.findByEmail(requestUserSignUpDto.getEmail());
 
         // 중복 체크
         if(validUser != null){
@@ -37,11 +37,14 @@ public class UserService {
 
         // 비밀번호 암호화
         User user = User.builder()
-                .name(requestUserSignDto.getName())
-                .password(bCryptPasswordEncoder.encode(requestUserSignDto.getPassword()))
-                .email(requestUserSignDto.getEmail())
+                .name(requestUserSignUpDto.getName())
+                .password(bCryptPasswordEncoder.encode(requestUserSignUpDto.getPassword()))
+                .email(requestUserSignUpDto.getEmail())
                 .role(Role.USER)
-                .address(new Address(requestUserSignDto.getBaseAddr(), requestUserSignDto.getDetailAddr()))
+                .age(requestUserSignUpDto.getAge())
+                .birth_dt(requestUserSignUpDto.getBirth_dt())
+                .phone_num(requestUserSignUpDto.getPhone_num())
+                .address(new Address(requestUserSignUpDto.getBaseAddr(), requestUserSignUpDto.getDetailAddr()))
                 .build();
 
         //MapStruct 사용 requestUserDto -> User Entity 로 변경
@@ -49,7 +52,7 @@ public class UserService {
     }
 
     @Transactional(readOnly = true)
-    public List<ResponseUserSignDto> findAll(){
+    public List<ResponseUserSignUpDto> findAll(){
 
         return userRepository.findAll().stream()
                 .map(userMapper::toDto)

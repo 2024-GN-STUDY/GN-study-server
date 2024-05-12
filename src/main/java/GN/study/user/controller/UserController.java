@@ -1,7 +1,7 @@
 package GN.study.user.controller;
 
-import GN.study.user.dto.RequestUserSignDto;
-import GN.study.user.dto.ResponseUserSignDto;
+import GN.study.user.dto.RequestUserSignUpDto;
+import GN.study.user.dto.ResponseUserSignUpDto;
 import GN.study.user.service.UserService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -20,22 +20,22 @@ public class UserController {
     private final UserService userService;
 
     @PostMapping
-    public ResponseEntity<ResponseUserSignDto> createUser(@Valid @RequestBody RequestUserSignDto requestUserSignDto){
+    public ResponseEntity<ResponseUserSignUpDto> createUser(@Valid @RequestBody RequestUserSignUpDto requestUserSignUpDto){
 
-        ResponseUserSignDto responseUserSignDto = userService.createUser(requestUserSignDto);
+        ResponseUserSignUpDto responseUserSignUpDto = userService.createUser(requestUserSignUpDto);
 
         // hateoas 적용
         URI location = ServletUriComponentsBuilder
                 .fromCurrentContextPath()
-                .path("/" + responseUserSignDto.getId())
+                .path("/" + responseUserSignUpDto.getId())
                 .buildAndExpand()
                 .toUri();
 
-        return ResponseEntity.created(location).body(responseUserSignDto);
+        return ResponseEntity.created(location).body(responseUserSignUpDto);
     }
 
     @GetMapping
-    public ResponseEntity<List<ResponseUserSignDto>> findAllUsers(){
+    public ResponseEntity<List<ResponseUserSignUpDto>> findAllUsers(){
         return ResponseEntity.ok(userService.findAll());
     }
 

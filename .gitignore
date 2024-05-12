@@ -5,3 +5,6 @@ build/*
 .gradle/
 grade/
 application.yml
+out/*
+out/
+build/
