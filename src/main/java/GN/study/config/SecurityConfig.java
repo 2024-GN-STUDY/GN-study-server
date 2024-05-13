@@ -22,7 +22,10 @@ public class SecurityConfig {
     public final String[] PERMIT_URL(){
         return new String[]{
                 "/api/users/",
-                "/error"
+                "/error",
+                "/swagger-ui/*",
+                "favicon.io",
+                "/v3/api-docs/*"
         };
     }
 

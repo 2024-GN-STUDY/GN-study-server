@@ -52,12 +52,14 @@ dependencies {
 
 	// Swagger
 	implementation 'io.swagger.core.v3:swagger-annotations:2.2.21'
+	implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.4.0'
 
 	//TEST
 	testImplementation 'org.springframework.security:spring-security-test'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	testImplementation 'org.junit.jupiter:junit-jupiter-api:5.11.0-M1'
 	testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.10.2'
+
 
 }
 

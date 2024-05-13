@@ -1,5 +1,6 @@
 package GN.study.user.entity;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -9,6 +10,7 @@ import java.util.Date;
 @Table(name = "Users")
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@Schema(description = "User Entity")
 public class User {
 
     @Id
