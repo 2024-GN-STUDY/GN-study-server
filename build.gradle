@@ -9,6 +9,7 @@ version = '0.0.1-SNAPSHOT'
 
 java {
 	sourceCompatibility = '17'
+	targetCompatibility = '17'
 }
 
 configurations {
@@ -25,7 +26,6 @@ dependencies {
 
 	// https://mvnrepository.com/artifact/org.mapstruct/mapstruct		// ModelMapper 보다 훨씬 빠르고 성능저하 이슈 X
 	implementation 'org.mapstruct:mapstruct:1.5.5.Final'
-	testImplementation 'junit:junit:4.13.1'
 	annotationProcessor 'org.mapstruct:mapstruct-processor:1.5.5.Final'
 	annotationProcessor 'org.projectlombok:lombok-mapstruct-binding:0.2.0'
 	annotationProcessor 'org.projectlombok:lombok'
@@ -49,13 +49,21 @@ dependencies {
 
 	// SECURITY
 	implementation 'org.springframework.boot:spring-boot-starter-security'
-	testImplementation 'org.springframework.security:spring-security-test'
 
 	// Swagger
 	implementation 'io.swagger.core.v3:swagger-annotations:2.2.21'
 
+	//TEST
+	testImplementation 'org.springframework.security:spring-security-test'
+	testImplementation 'org.springframework.boot:spring-boot-starter-test'
+	testImplementation 'org.junit.jupiter:junit-jupiter-api:5.11.0-M1'
+	testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.10.2'
+
+}
 
 
+test{
+	useJUnitPlatform()
 }
 
 tasks.named('test') {

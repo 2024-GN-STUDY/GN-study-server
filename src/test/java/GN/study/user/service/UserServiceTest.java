@@ -1,23 +1,21 @@
 package GN.study.user.service;
 
-
 import GN.study.user.dto.RequestUserSignUpDto;
 import GN.study.user.dto.ResponseUserSignUpDto;
-import GN.study.user.entity.Address;
 import GN.study.user.exception.UserExistException;
 import GN.study.user.repository.UserRepository;
 import jakarta.persistence.EntityManager;
-import jakarta.transaction.Transactional;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
+import org.springframework.transaction.annotation.Transactional;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
-@RunWith(SpringRunner.class)
+@ExtendWith(SpringExtension.class)  // JUnit 5 부터 ExtendWith 사용
 @Transactional
 public class UserServiceTest {
 

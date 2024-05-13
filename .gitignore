@@ -8,3 +8,4 @@ application.yml
 out/*
 out/
 build/
+generated/
