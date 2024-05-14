@@ -1,5 +1,6 @@
 package GN.study.config;
 
+import GN.study.jwt.service.JwtService;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -21,8 +22,6 @@ public class JwtRequestFilter  extends OncePerRequestFilter {
     private final JwtUtil jwtUtil;
 
     private final UserDetailsService userDetailsService;
-
-    private final JwtService jwtService;
 
     // 로그인, 회원가입, 엑세스토큰 재발급
     private static final Set<String> SKIP_URIS = Set.of(

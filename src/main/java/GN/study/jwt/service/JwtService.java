@@ -1,9 +1,10 @@
-package GN.study.config;
+package GN.study.jwt.service;
 
-import kongkong.myrestfulservice.domain.AuthRequest;
-import kongkong.myrestfulservice.domain.AuthResponse;
-import kongkong.myrestfulservice.jwt.redis.RedisRepository;
-import kongkong.myrestfulservice.jwt.redis.RefreshToken;
+import GN.study.config.JwtUtil;
+import GN.study.jwt.dto.RequestLoginDto;
+import GN.study.jwt.dto.ResponseLoginDto;
+import GN.study.redis.repository.RedisRepository;
+import GN.study.redis.token.RefreshToken;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -17,8 +18,6 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional(readOnly = true)
 public class JwtService {
 
-    private final JwtRepository jwtRepository;
-
     private final JwtUtil jwtUtil;
 
     private final AuthenticationManager authenticationManager;
@@ -26,10 +25,10 @@ public class JwtService {
     private final RedisRepository redisRepository;
 
     @Transactional
-    public AuthResponse createToken(AuthRequest authRequest){
+    public ResponseLoginDto createToken(RequestLoginDto requestLoginDto){
 
         // 입력받은 로그인 정보로 UsernamePasswordAuthenticationToken 생성
-        Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(authRequest.getName(), authRequest.getPassword()));
+        Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(requestLoginDto.getName(), requestLoginDto.getPassword()));
 
         // authentication 객체에서 UserDetails 추출(사용자의 상세정보 포함)
         final UserDetails userDetails = (UserDetails) authentication.getPrincipal();
@@ -40,7 +39,7 @@ public class JwtService {
 
         redisRepository.save(new RefreshToken(refreshToken, userDetails.getUsername()));
 
-        return new AuthResponse(accessToken, refreshToken);
+        return new ResponseLoginDto(accessToken, refreshToken);
     }
 
 }
