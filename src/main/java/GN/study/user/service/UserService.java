@@ -1,7 +1,5 @@
 package GN.study.user.service;
 
-import GN.study.user.dto.RequestUserDto;
-import GN.study.user.dto.ResponseUserDto;
 import GN.study.user.entity.User;
 import GN.study.user.repository.UserRepository;
 import lombok.NoArgsConstructor;
@@ -14,8 +12,8 @@ public class UserService {
 
     private final UserRepository userRepository;
 
-    public ResponseUserDto createUser(RequestUserDto requestUserDto){
+    /*public ResponseUserDto createUser(RequestUserDto requestUserDto){
         User user = requestUserDto.toEntity(requestUserDto);
         return ResponseUserDto.toDto(userRepository.save(user));
-    }
+    }*/
 }

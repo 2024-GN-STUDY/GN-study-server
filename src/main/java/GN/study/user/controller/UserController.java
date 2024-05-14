@@ -1,7 +1,5 @@
 package GN.study.user.controller;
 
-import GN.study.user.dto.RequestUserDto;
-import GN.study.user.dto.ResponseUserDto;
 import GN.study.user.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -14,8 +12,8 @@ public class UserController {
 
     private final UserService userService;
 
-    @PostMapping("/user")
-    public ResponseEntity<ResponseUserDto> createUser(RequestUserDto requestUserDto){
-        return ResponseEntity.ok(userService.createUser(requestUserDto));
-    }
+//    @PostMapping("/user")
+//    public ResponseEntity<ResponseUserDto> createUser(RequestUserDto requestUserDto){
+//        return ResponseEntity.ok(userService.createUser(requestUserDto));
+//    }
 }
