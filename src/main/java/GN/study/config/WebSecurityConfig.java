@@ -1,6 +1,7 @@
 package GN.study.config;
 
 import GN.study.jwt.service.JwtService;
+import GN.study.user.service.CustomUserDetailsService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
@@ -24,7 +25,7 @@ import org.springframework.web.servlet.handler.HandlerMappingIntrospector;
 @RequiredArgsConstructor
 public class WebSecurityConfig {
 
-    private final UserDetailsService userDetailsService;
+    private final CustomUserDetailsService userDetailsService;
 
     @Bean
     @ConditionalOnProperty(name = "spring.h2.console.enalbed", havingValue = "true")

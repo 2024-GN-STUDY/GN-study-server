@@ -44,10 +44,10 @@ public class UserServiceTest {
 
         em.flush();
         //then
-        assertEquals(responseUserSignUpDto.getId(), userRepository.findByEmail("maintain98@naver.com").getId());
+        assertEquals(responseUserSignUpDto.getId(), userRepository.findByEmail("maintain98@naver.com").orElseThrow().getId());
         assertEquals("서울 동작구", requestUserSignUpDto1.getBaseAddr());
-        assertEquals(requestUserSignUpDto1.getBaseAddr(), userRepository.findByEmail("maintain98@naver.com").getAddress().getBaseAddr());
-        assertEquals(requestUserSignUpDto1.getDetailAddr(), userRepository.findByEmail("maintain98@naver.com").getAddress().getDetailAddr());
+        assertEquals(requestUserSignUpDto1.getBaseAddr(), userRepository.findByEmail("maintain98@naver.com").orElseThrow().getAddress().getBaseAddr());
+        assertEquals(requestUserSignUpDto1.getDetailAddr(), userRepository.findByEmail("maintain98@naver.com").orElseThrow().getAddress().getDetailAddr());
     }
 
     @Test
