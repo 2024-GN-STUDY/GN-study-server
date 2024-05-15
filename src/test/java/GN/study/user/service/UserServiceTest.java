@@ -1,7 +1,7 @@
 package GN.study.user.service;
 
-import GN.study.user.dto.RequestUserSignUpDto;
-import GN.study.user.dto.ResponseUserSignUpDto;
+import GN.study.user.dto.signup.RequestUserSignUpDto;
+import GN.study.user.dto.signup.ResponseUserSignUpDto;
 import GN.study.user.exception.UserExistException;
 import GN.study.user.repository.UserRepository;
 import jakarta.persistence.EntityManager;

@@ -1,4 +1,4 @@
-package GN.study.config;
+package GN.study.jwt.util;
 
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.JWTVerifier;
@@ -16,12 +16,12 @@ public class JwtUtil {
 
     /***S
      * Access 토큰 생성
-     * @param username 유저 ID
+     * @param email 유저 ID
      * @return 생성된 JWT token 문자열 반환
      */
-    public String generateAccessToken(String username) {
+    public String generateAccessToken(String email) {
         return JWT.create()
-                .withSubject(username)                                                      // 토큰 주체, 사용자 이름
+                .withSubject(email)                                                      // 토큰 주체, 사용자 이름
                 .withIssuedAt(new Date())                                                   // 토큰 발행 시간, 현재시간
                 .withExpiresAt(new Date(System.currentTimeMillis() + 1000 * 60 * 60))       // 1 hours 1000 * 60 * 60
                 .withClaim("token_type", "access")                         // token_type 추가 , claim 커스텀
@@ -30,13 +30,13 @@ public class JwtUtil {
 
     /***
      *  Refresh 토큰 생성
-     * @param username 유저 ID
+     * @param email 유저 ID
      * @return 생성된 JWT token 문자열 반환
      */
-    public String generateRefreshToken(String username) {
+    public String generateRefreshToken(String email) {
 
         return JWT.create()
-                .withSubject(username)                                                      // 토큰 주체, 사용자 이름
+                .withSubject(email)                                                      // 토큰 주체, 사용자 이름
                 .withIssuedAt(new Date())                                                   // 토큰 발행 시간, 현재시간
                 .withExpiresAt(new Date(System.currentTimeMillis() + 1000 * 60 * 60 * 24 * 3))       // 3 day 1000 * 60 * 60 * 24 * 3
                 .withClaim("token_type", "refresh")                         // token_type 추가 , claim 커스텀
@@ -85,15 +85,15 @@ public class JwtUtil {
      * @param token 토큰
      * @return boolean
      */
-    public boolean validateToken(String token, String name){
+    public boolean validateToken(String token, String email){
         try{
             JWTVerifier verifier = JWT.require(Algorithm.HMAC256(SECRET_KEY))
-                    .withSubject(name)
+                    .withSubject(email)
                     .build();
             DecodedJWT jwt = verifier.verify(token);
 
             String tokenSubject = jwt.getSubject();
-            return tokenSubject.equals(name);
+            return tokenSubject.equals(email);
         } catch(JWTVerificationException e){
             // Invalid Token
             //e.printStackTrace();

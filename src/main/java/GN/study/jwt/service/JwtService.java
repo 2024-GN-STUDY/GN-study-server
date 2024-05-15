@@ -1,8 +1,8 @@
 package GN.study.jwt.service;
 
-import GN.study.config.JwtUtil;
-import GN.study.jwt.dto.RequestLoginDto;
-import GN.study.jwt.dto.ResponseLoginDto;
+import GN.study.jwt.util.JwtUtil;
+import GN.study.user.dto.login.RequestLoginDto;
+import GN.study.user.dto.login.ResponseLoginDto;
 import GN.study.redis.repository.RedisRepository;
 import GN.study.redis.token.RefreshToken;
 import lombok.RequiredArgsConstructor;
@@ -28,7 +28,7 @@ public class JwtService {
     public ResponseLoginDto createToken(RequestLoginDto requestLoginDto){
 
         // 입력받은 로그인 정보로 UsernamePasswordAuthenticationToken 생성
-        Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(requestLoginDto.getName(), requestLoginDto.getPassword()));
+        Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(requestLoginDto.getEmail(), requestLoginDto.getPassword()));
 
         // authentication 객체에서 UserDetails 추출(사용자의 상세정보 포함)
         final UserDetails userDetails = (UserDetails) authentication.getPrincipal();
@@ -39,7 +39,10 @@ public class JwtService {
 
         redisRepository.save(new RefreshToken(refreshToken, userDetails.getUsername()));
 
-        return new ResponseLoginDto(accessToken, refreshToken);
+        return ResponseLoginDto.builder()
+                .accessToken(accessToken)
+                .refreshToken(refreshToken)
+                .build();
     }
 
 }

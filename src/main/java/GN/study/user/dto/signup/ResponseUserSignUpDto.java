@@ -1,4 +1,4 @@
-package GN.study.user.dto;
+package GN.study.user.dto.signup;
 
 import GN.study.user.entity.Role;
 import io.swagger.v3.oas.annotations.media.Schema;

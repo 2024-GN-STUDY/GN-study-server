@@ -1,6 +1,7 @@
 package GN.study.config;
 
 import GN.study.jwt.service.JwtService;
+import GN.study.jwt.util.JwtUtil;
 import GN.study.user.service.CustomUserDetailsService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
@@ -14,7 +15,6 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.annotation.web.configurers.HeadersConfigurer;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
@@ -47,16 +47,15 @@ public class WebSecurityConfig {
                 .passwordEncoder(bCryptPasswordEncoder());
 
         return authenticationManagerBuilder.build();
-
     }
 
     // .permitAll() 주소
     private static final String[] PERMIT_ALL = {
-            "/jpa/users/login", "/jpa/createUser", "/error", "/jpa/refresh/token", "/h2-console", "/h2-console/"
+            "/users/login", "/users/signup", "/error", "/refresh/token", "/h2-console/"
     };
 
     @Bean
-    protected SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity, HandlerMappingIntrospector introspector, JwtUtil jwtUtil, JwtService jwtService) throws Exception {
+    protected SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity, JwtUtil jwtUtil) throws Exception {
 
         httpSecurity
                 .csrf(AbstractHttpConfigurer::disable)

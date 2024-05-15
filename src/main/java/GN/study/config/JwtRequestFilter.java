@@ -1,6 +1,6 @@
 package GN.study.config;
 
-import GN.study.jwt.service.JwtService;
+import GN.study.jwt.util.JwtUtil;
 import GN.study.user.service.CustomUserDetailsService;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -10,7 +10,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.web.filter.OncePerRequestFilter;
 
@@ -26,9 +25,9 @@ public class JwtRequestFilter  extends OncePerRequestFilter {
 
     // 로그인, 회원가입, 엑세스토큰 재발급
     private static final Set<String> SKIP_URIS = Set.of(
-            "/jpa/users/login",
-            "/jpa/createUser",
-            "/jpa/refresh/token",
+            "/users/login",
+            "/users/signup",
+            "/refresh/token",
             "/h2-console/"
     );
 

@@ -1,5 +1,6 @@
-package GN.study.user.dto;
+package GN.study.user.dto.signup;
 
+import GN.study.user.entity.Role;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
@@ -47,5 +48,8 @@ public class RequestUserSignUpDto {
 
     @Schema(title = "사용자 상세주소")
     private String detailAddr;
+
+    @Schema(title = "유저 권한")
+    private Role role;
 
 }
