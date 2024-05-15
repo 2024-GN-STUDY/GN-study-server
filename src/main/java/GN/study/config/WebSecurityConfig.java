@@ -67,7 +67,7 @@ public class WebSecurityConfig {
                 //Spring Security 는 기본적으로 X-Frame-Options 에서 Click jacking 을 막고있음
                 //*click jacking -> 해킹 기법
                 .headers((headers) -> headers.frameOptions(HeadersConfigurer.FrameOptionsConfig::sameOrigin))
-                .addFilterBefore(new JwtRequestFilter(jwtUtil, userDetailsService), UsernamePasswordAuthenticationFilter.class)
+                //.addFilterBefore(UsernamePasswordAuthenticationFilter.class)
                 .exceptionHandling((exception) -> {
                             //TODO :: Exception Handler
                         }

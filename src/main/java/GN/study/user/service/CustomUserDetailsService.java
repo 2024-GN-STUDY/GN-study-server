@@ -4,6 +4,7 @@ import GN.study.user.entity.User;
 import GN.study.user.exception.UserNotFoundException;
 import GN.study.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
