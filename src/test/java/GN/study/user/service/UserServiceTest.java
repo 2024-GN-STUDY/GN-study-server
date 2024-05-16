@@ -42,7 +42,6 @@ public class UserServiceTest {
                 .email("maintain95@naver.com")
                 .baseAddr("서울 동작구")
                 .detailAddr("자이 아파트")
-                .role(Role.USER)
                 .build();
 
         //when
@@ -66,7 +65,6 @@ public class UserServiceTest {
                 .email("maintain98@naver.com")
                 .baseAddr("서울 동작구")
                 .detailAddr("자이 아파트")
-                .role(Role.USER)
                 .build();
 
         RequestUserSignUpDto requestUserSignUpDto2 = RequestUserSignUpDto.builder()
@@ -75,7 +73,6 @@ public class UserServiceTest {
                 .email("maintain98@naver.com")      // 동일한 이메일 입력시
                 .baseAddr("서울 동작구")
                 .detailAddr("자이 아파트")
-                .role(Role.USER)
                 .build();
 
         //when
@@ -101,7 +98,6 @@ public class UserServiceTest {
                 .name("Yu")
                 .password("password1")
                 .email("maintain98@naver.com")
-                .role(Role.USER)
                 .build();
 
         // when

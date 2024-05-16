@@ -6,6 +6,7 @@ import GN.study.user.dto.login.ResponseLoginDto;
 import GN.study.user.dto.signup.RequestUserSignUpDto;
 import GN.study.user.dto.signup.ResponseUserSignUpDto;
 import GN.study.user.entity.Address;
+import GN.study.user.entity.Role;
 import GN.study.user.entity.User;
 import GN.study.user.exception.UserExistException;
 import GN.study.user.exception.UserNotFoundException;
@@ -47,7 +48,7 @@ public class UserService {
                 .birth_dt(requestUserDto.getBirth_dt())
                 .phone_num(requestUserDto.getPhone_num())
                 .address(new Address(requestUserDto.getBaseAddr(), requestUserDto.getDetailAddr()))
-                .role(requestUserDto.getRole())
+                .role(Role.USER)
                 .build();
 
         return userMapper.toSingUpDto(userRepository.save(user));
