@@ -7,6 +7,7 @@ import GN.study.user.dto.signup.RequestUserSignUpDto;
 import GN.study.user.dto.signup.ResponseUserSignUpDto;
 import GN.study.user.entity.Address;
 import GN.study.user.entity.User;
+import GN.study.user.exception.UserExistException;
 import GN.study.user.exception.UserNotFoundException;
 import GN.study.user.mapper.UserMapper;
 import GN.study.user.repository.UserRepository;
@@ -34,6 +35,10 @@ public class UserService {
 
     @Transactional
     public ResponseUserSignUpDto createUser(RequestUserSignUpDto requestUserDto){
+
+        // Email 중복 체크  실패 시 예외처리 -> 409 Conflict
+        this.checkEmail(requestUserDto.getEmail());
+
         User user = User.builder()
                 .name(requestUserDto.getName())
                 .password(bCryptPasswordEncoder.encode(requestUserDto.getPassword()))
@@ -55,7 +60,14 @@ public class UserService {
 
     @Transactional(readOnly = true)
     public Boolean checkEmail(String email){
-        return !userRepository.existsByEmail(email);
+
+        // Email 중복 체크
+        Optional<User> findUser = userRepository.findByEmail(email);
+        if(findUser.isPresent()){
+            throw new UserExistException();
+        }
+
+        return true;
     }
 
 }

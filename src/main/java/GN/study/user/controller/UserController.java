@@ -17,7 +17,7 @@ public class UserController {
 
     private final UserService  userService;
 
-    @PostMapping("/signup/")
+    @PostMapping("/signup")
     public ResponseEntity<ResponseUserSignUpDto> createUser(@RequestBody RequestUserSignUpDto requestUserDto){
         return ResponseEntity.ok(userService.createUser(requestUserDto));
     }
@@ -30,6 +30,6 @@ public class UserController {
     @GetMapping("/signup/check-email")
     public ResponseEntity<HttpStatus> getUserByEmail(@RequestParam("email") String email){
             Boolean isEmail = userService.checkEmail(email);
-        return ResponseEntity.ok(isEmail ? HttpStatus.OK : HttpStatus.NOT_FOUND);
+        return ResponseEntity.ok(isEmail ? HttpStatus.OK : HttpStatus.CONFLICT);
     }
 }
