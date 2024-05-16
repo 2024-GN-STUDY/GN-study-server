@@ -30,7 +30,11 @@ public class JwtRequestFilter  extends OncePerRequestFilter {
             "/users/signup",
             "/users/login",
             "/refresh/token",
-            "/h2-console/"
+            "/h2-console",
+            "/swagger-ui",
+            "/favicon.ico",
+            "/v3/api-docs",
+            "/swagger-config"
     );
 
     @Override
