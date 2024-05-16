@@ -3,6 +3,7 @@ package GN.study.config;
 import GN.study.jwt.service.JwtService;
 import GN.study.jwt.util.JwtUtil;
 import GN.study.user.service.CustomUserDetailsService;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
@@ -17,6 +18,7 @@ import org.springframework.security.config.annotation.web.configurers.AbstractHt
 import org.springframework.security.config.annotation.web.configurers.HeadersConfigurer;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.AuthenticationFailureHandler;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.servlet.handler.HandlerMappingIntrospector;
 
@@ -51,7 +53,8 @@ public class WebSecurityConfig {
 
     // .permitAll() 주소
     private static final String[] PERMIT_ALL = {
-            "/users/login", "/users/signup", "/error", "/refresh/token", "/h2-console/"
+            "/users/signup/**", "/users/login", "/error/**", "/refresh/token", "/h2-console/",
+
     };
 
     @Bean
@@ -67,7 +70,7 @@ public class WebSecurityConfig {
                 //Spring Security 는 기본적으로 X-Frame-Options 에서 Click jacking 을 막고있음
                 //*click jacking -> 해킹 기법
                 .headers((headers) -> headers.frameOptions(HeadersConfigurer.FrameOptionsConfig::sameOrigin))
-                //.addFilterBefore(UsernamePasswordAuthenticationFilter.class)
+                .addFilterBefore(new JwtRequestFilter(jwtUtil, userDetailsService), UsernamePasswordAuthenticationFilter.class)
                 .exceptionHandling((exception) -> {
                             //TODO :: Exception Handler
                         }
@@ -75,4 +78,5 @@ public class WebSecurityConfig {
 
         return httpSecurity.build();
     }
+
 }

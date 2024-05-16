@@ -12,9 +12,12 @@ import GN.study.user.mapper.UserMapper;
 import GN.study.user.repository.UserRepository;
 import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -48,6 +51,11 @@ public class UserService {
     @Transactional
     public ResponseLoginDto login(RequestLoginDto requestLoginDto){
         return jwtService.createToken(requestLoginDto);
+    }
+
+    @Transactional(readOnly = true)
+    public Boolean checkEmail(String email){
+        return !userRepository.existsByEmail(email);
     }
 
 }

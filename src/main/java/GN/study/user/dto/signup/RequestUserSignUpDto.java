@@ -14,6 +14,8 @@ import java.util.Date;
 @Setter
 @Builder
 @Schema(description = "회원가입 요청 Dto 객체")
+@NoArgsConstructor
+@AllArgsConstructor
 public class RequestUserSignUpDto {
 
     @NotBlank

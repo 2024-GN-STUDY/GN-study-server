@@ -19,7 +19,6 @@ import java.io.IOException;
 import java.util.Set;
 
 @RequiredArgsConstructor
-@Component
 public class JwtRequestFilter  extends OncePerRequestFilter {
 
     private final JwtUtil jwtUtil;
@@ -28,8 +27,8 @@ public class JwtRequestFilter  extends OncePerRequestFilter {
 
     // 로그인, 회원가입, 엑세스토큰 재발급
     private static final Set<String> SKIP_URIS = Set.of(
-            "/users/login",
             "/users/signup",
+            "/users/login",
             "/refresh/token",
             "/h2-console/"
     );
@@ -65,9 +64,9 @@ public class JwtRequestFilter  extends OncePerRequestFilter {
 
         // 엑세스토큰 의 경우 사용자 정보 검증
         if(username != null && SecurityContextHolder.getContext().getAuthentication() == null){
-            UserDetails userDetails = userDetailsService.loadUserByUsername(username);
 
             if(jwtUtil.validateToken(token, username)){
+                UserDetails userDetails = userDetailsService.loadUserByUsername(username);
                 UsernamePasswordAuthenticationToken authenticationToken =
                         new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
 
