@@ -58,7 +58,6 @@ public class UserService {
         return jwtService.createToken(requestLoginDto);
     }
 
-    @Transactional(readOnly = true)
     public Boolean checkEmail(String email){
 
         // Email 중복 체크
