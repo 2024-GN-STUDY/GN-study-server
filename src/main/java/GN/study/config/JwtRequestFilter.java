@@ -34,7 +34,8 @@ public class JwtRequestFilter  extends OncePerRequestFilter {
             "/swagger-ui",
             "/favicon.ico",
             "/v3/api-docs",
-            "/swagger-config"
+            "/swagger-config",
+            "/api/v1/auth/login"
     );
 
     @Override

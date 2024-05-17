@@ -50,7 +50,7 @@ public class WebSecurityConfig {
     // .permitAll() 주소
     private static final String[] PERMIT_ALL = {
             "/users/signup/**", "/users/login", "/error/**", "/refresh/token", "/h2-console", "/swagger-ui/**",
-            "/v3/api-docs/**", "/favicon.ico"
+            "/v3/api-docs/**", "/favicon.ico", "/api/v1/auth/login"
 
     };
 
