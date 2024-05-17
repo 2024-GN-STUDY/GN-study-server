@@ -8,6 +8,7 @@ import GN.study.user.token.RefreshToken;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -34,21 +35,25 @@ public class JwtTokenService {
     @Transactional
     public ResponseLoginDto createToken(RequestLoginDto requestLoginDto){
 
-        // 입력받은 로그인 정보로 UsernamePasswordAuthenticationToken 생성
-        Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(requestLoginDto.getEmail(), requestLoginDto.getPassword()));
+        try {
+            // 입력받은 로그인 정보로 UsernamePasswordAuthenticationToken 생성
+            Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(requestLoginDto.getEmail(), requestLoginDto.getPassword()));
 
-        // authentication 객체에서 UserDetails 추출(사용자의 상세정보 포함)
-        final UserDetails userDetails = (UserDetails) authentication.getPrincipal();
-        // JWT 토큰 생성
-        final String accessToken = jwtUtil.generateAccessToken(userDetails.getUsername());
-        final String refreshToken = jwtUtil.generateRefreshToken(userDetails.getUsername());
+            // authentication 객체에서 UserDetails 추출(사용자의 상세정보 포함)
+            final UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+            // JWT 토큰 생성
+            final String accessToken = jwtUtil.generateAccessToken(userDetails.getUsername());
+            final String refreshToken = jwtUtil.generateRefreshToken(userDetails.getUsername());
 
-        redisRepository.save(new RefreshToken(refreshToken, userDetails.getUsername()));
+            redisRepository.save(new RefreshToken(refreshToken, userDetails.getUsername()));
 
-        return ResponseLoginDto.builder()
-                .accessToken(accessToken)
-                .refreshToken(refreshToken)
-                .build();
+            return ResponseLoginDto.builder()
+                    .accessToken(accessToken)
+                    .refreshToken(refreshToken)
+                    .build();
+        } catch (Exception e){
+            throw new BadCredentialsException("invalid credentials");
+        }
     }
 
     /**

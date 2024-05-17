@@ -2,7 +2,6 @@ package GN.study.user.controller;
 
 import GN.study.user.dto.login.RequestLoginDto;
 import GN.study.user.dto.login.ResponseLoginDto;
-import GN.study.user.exception.UserNotFoundException;
 import GN.study.user.service.AuthService;
 import GN.study.user.token.RefreshToken;
 import jakarta.servlet.http.Cookie;
@@ -24,12 +23,7 @@ public class AuthController {
     @PostMapping("/login")
     public ResponseEntity<ResponseLoginDto> login(@Valid @RequestBody RequestLoginDto requestLoginDto, HttpServletResponse response) {
 
-            ResponseLoginDto responseLoginDto = null;
-        try{
-            responseLoginDto = authService.login(requestLoginDto);
-        } catch (Exception e){
-            throw new UserNotFoundException("USER NOT FOUND");
-        }
+        ResponseLoginDto responseLoginDto = authService.login(requestLoginDto);
 
         // Access Token을 일반 쿠키로 설정
         Cookie accessTokenCookie = new Cookie("Access-Token", responseLoginDto.getAccessToken());
@@ -64,4 +58,5 @@ public class AuthController {
 
         return ResponseEntity.ok(HttpStatus.OK);
     }
+
 }

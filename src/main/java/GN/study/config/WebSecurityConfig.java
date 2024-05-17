@@ -62,8 +62,8 @@ public class WebSecurityConfig {
                 //*click jacking -> 해킹 기법
                 .headers((headers) -> headers.frameOptions(HeadersConfigurer.FrameOptionsConfig::sameOrigin))
                 .addFilterBefore(new JwtRequestFilter(jwtUtil, userDetailsService, jwtTokenService), UsernamePasswordAuthenticationFilter.class)
-                .exceptionHandling((exception) -> {
-                            //TODO :: Exception Handler
+                .exceptionHandling((exception) ->{
+
                         }
                 );
 

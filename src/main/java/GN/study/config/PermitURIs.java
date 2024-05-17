@@ -1,8 +1,8 @@
 package GN.study.config;
 
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 public class PermitURIs {
 
@@ -14,7 +14,9 @@ public class PermitURIs {
             "/refresh/token",
             "/h2-console",
             "/swagger-ui/**",
+            "/swagger-ui",
             "/v3/api-docs/**",
+            "/v3/api-docs",
             "/favicon.ico",
             "/api/v1/users/check-email?**",
             "/api/v1/users/check-email",
@@ -26,5 +28,5 @@ public class PermitURIs {
     public static final String[] PERMIT_ALL = URIS.toArray(new String[0]);
 
     // Filter 설정에서 사용할 Set
-    public static final Set<String> SKIP_URIS = URIS.stream().collect(Collectors.toSet());
+    public static final Set<String> SKIP_URIS = new HashSet<>(URIS);
 }
