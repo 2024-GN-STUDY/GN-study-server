@@ -25,8 +25,8 @@ public class AuthController {
         ResponseLoginDto responseLoginDto = authService.login(requestLoginDto);
 
         HttpHeaders headers = new HttpHeaders();
-        headers.set("Access-Token", responseLoginDto.getAccessToken());
-        headers.set("Refresh-Token", responseLoginDto.getRefreshToken());
+        headers.set(HttpHeaders.SET_COOKIE, "Access-Token=" + responseLoginDto.getAccessToken());
+        headers.set(HttpHeaders.SET_COOKIE, "Refresh-Token=" + responseLoginDto.getRefreshToken());
 
         return ResponseEntity.ok().headers(headers).build();
     }
