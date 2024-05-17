@@ -1,9 +1,7 @@
 package GN.study.config;
 
-import GN.study.jwt.service.JwtService;
-import GN.study.jwt.util.JwtUtil;
 import GN.study.user.service.CustomUserDetailsService;
-import jakarta.servlet.http.HttpServletResponse;
+import GN.study.user.service.JwtTokenService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
@@ -18,9 +16,7 @@ import org.springframework.security.config.annotation.web.configurers.AbstractHt
 import org.springframework.security.config.annotation.web.configurers.HeadersConfigurer;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
-import org.springframework.security.web.authentication.AuthenticationFailureHandler;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-import org.springframework.web.servlet.handler.HandlerMappingIntrospector;
 
 @Configuration
 @EnableWebSecurity
@@ -59,7 +55,7 @@ public class WebSecurityConfig {
     };
 
     @Bean
-    protected SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity, JwtUtil jwtUtil) throws Exception {
+    protected SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity, JwtUtil jwtUtil, JwtTokenService jwtTokenService) throws Exception {
 
         httpSecurity
                 .csrf(AbstractHttpConfigurer::disable)
@@ -71,7 +67,7 @@ public class WebSecurityConfig {
                 //Spring Security 는 기본적으로 X-Frame-Options 에서 Click jacking 을 막고있음
                 //*click jacking -> 해킹 기법
                 .headers((headers) -> headers.frameOptions(HeadersConfigurer.FrameOptionsConfig::sameOrigin))
-                .addFilterBefore(new JwtRequestFilter(jwtUtil, userDetailsService), UsernamePasswordAuthenticationFilter.class)
+                .addFilterBefore(new JwtRequestFilter(jwtUtil, userDetailsService, jwtTokenService), UsernamePasswordAuthenticationFilter.class)
                 .exceptionHandling((exception) -> {
                             //TODO :: Exception Handler
                         }

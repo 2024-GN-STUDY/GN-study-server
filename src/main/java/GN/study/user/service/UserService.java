@@ -1,20 +1,14 @@
 package GN.study.user.service;
 
-import GN.study.jwt.service.JwtService;
-import GN.study.user.dto.login.RequestLoginDto;
-import GN.study.user.dto.login.ResponseLoginDto;
 import GN.study.user.dto.signup.RequestUserSignUpDto;
 import GN.study.user.dto.signup.ResponseUserSignUpDto;
 import GN.study.user.entity.Address;
 import GN.study.user.entity.Role;
 import GN.study.user.entity.User;
 import GN.study.user.exception.UserExistException;
-import GN.study.user.exception.UserNotFoundException;
 import GN.study.user.mapper.UserMapper;
 import GN.study.user.repository.UserRepository;
-import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -28,7 +22,6 @@ public class UserService {
 
     private final UserRepository userRepository;
 
-    private final JwtService jwtService;
 
     private final UserMapper userMapper;
 
@@ -52,11 +45,6 @@ public class UserService {
                 .build();
 
         return userMapper.toSingUpDto(userRepository.save(user));
-    }
-
-    @Transactional
-    public ResponseLoginDto login(RequestLoginDto requestLoginDto){
-        return jwtService.createToken(requestLoginDto);
     }
 
     public Boolean checkEmail(String email){

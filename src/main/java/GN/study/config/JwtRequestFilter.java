@@ -1,18 +1,16 @@
 package GN.study.config;
 
-import GN.study.jwt.util.JwtUtil;
 import GN.study.user.service.CustomUserDetailsService;
+import GN.study.user.service.JwtTokenService;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
-import org.springframework.context.annotation.Bean;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
-import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
@@ -24,6 +22,8 @@ public class JwtRequestFilter  extends OncePerRequestFilter {
     private final JwtUtil jwtUtil;
 
     private final CustomUserDetailsService userDetailsService;
+
+    private final JwtTokenService jwtTokenService;
 
     // 로그인, 회원가입, 엑세스토큰 재발급
     private static final Set<String> SKIP_URIS = Set.of(
@@ -60,9 +60,14 @@ public class JwtRequestFilter  extends OncePerRequestFilter {
         String username = jwtUtil.extractUsername(token);
         String type = jwtUtil.extractType(token);
 
-        // 리프레시 토큰일 경우 검증 수행, 만료기간이 남으면 핉터체인 진행, 없으면 401 에러 반환
+        // 리프레시 토큰일 경우 검증 스킵
         if("refresh".equals(type)){
             filterChain.doFilter(request, response);
+            return;
+        }
+
+        //블랙리스트 인지 체크
+        if(jwtTokenService.isTokenBlacklisted(token)){
             return;
         }
 

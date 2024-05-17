@@ -1,15 +1,17 @@
-package GN.study.jwt.util;
+package GN.study.config;
 
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.JWTVerifier;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.exceptions.JWTVerificationException;
 import com.auth0.jwt.interfaces.DecodedJWT;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
 import java.util.Date;
 
 @Component
+@RequiredArgsConstructor
 public class JwtUtil {
 
     private static final String SECRET_KEY = "KEYKEYKEY";
@@ -101,6 +103,4 @@ public class JwtUtil {
 
         return false;
     }
-
-
 }

@@ -1,6 +1,6 @@
-package GN.study.redis.repository;
+package GN.study.user.repository;
 
-import GN.study.redis.token.RefreshToken;
+import GN.study.user.token.RefreshToken;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 
