@@ -47,13 +47,6 @@ public class WebSecurityConfig {
         return authenticationManagerBuilder.build();
     }
 
-    // .permitAll() 주소
-    private static final String[] PERMIT_ALL = {
-            "/api/v1/users",
-            "/api/v1/auth/login", "/error/**", "/refresh/token", "/h2-console", "/swagger-ui/**",
-            "/v3/api-docs/**", "/favicon.ico", "/api/v1/users/check-email/**"
-
-    };
 
     @Bean
     protected SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity, JwtUtil jwtUtil, JwtTokenService jwtTokenService) throws Exception {
@@ -61,7 +54,7 @@ public class WebSecurityConfig {
         httpSecurity
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests((request) -> request
-                        .requestMatchers(PERMIT_ALL).permitAll()
+                        .requestMatchers(PermitURIs.PERMIT_ALL).permitAll()
                         .anyRequest().authenticated()
                 )
                 //X-Frame-Options 브라우저에서 iframe 에서 일어난 요청에 대해 Origin 을 파악하고 같으면 요청을 허용하게됨

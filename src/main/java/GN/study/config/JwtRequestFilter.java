@@ -14,7 +14,6 @@ import org.springframework.security.web.authentication.WebAuthenticationDetailsS
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
-import java.util.Set;
 
 @RequiredArgsConstructor
 public class JwtRequestFilter  extends OncePerRequestFilter {
@@ -25,27 +24,13 @@ public class JwtRequestFilter  extends OncePerRequestFilter {
 
     private final JwtTokenService jwtTokenService;
 
-    // 로그인, 회원가입, 엑세스토큰 재발급
-    private static final Set<String> SKIP_URIS = Set.of(
-            "/api/v1/users",
-            "/api/v1/users/check-email",
-            "/api/v1/auth/login",
-            "/refresh/token",
-            "/h2-console",
-            "/swagger-ui",
-            "/favicon.ico",
-            "/v3/api-docs",
-            "/swagger-config",
-            "/api/v1/auth/login"
-    );
-
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
 
         String filterSkipPath = request.getRequestURI();
 
         // 로그인, 회원가입은 필터적용 X, anyMatch - 하나라도 포함되면 더 이상 실행 X
-        if(SKIP_URIS.stream().anyMatch(filterSkipPath::contains)){
+        if(PermitURIs.SKIP_URIS.stream().anyMatch(filterSkipPath::contains)){
             filterChain.doFilter(request, response);
             return;
         }

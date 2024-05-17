@@ -41,7 +41,7 @@ public class UserService {
                 .birth_dt(requestUserDto.getBirth_dt())
                 .phone_num(requestUserDto.getPhone_num())
                 .address(new Address(requestUserDto.getBaseAddr(), requestUserDto.getDetailAddr()))
-                .role(Role.USER)
+                .role(Role.ROLE_USER)
                 .build();
 
         return userMapper.toSingUpDto(userRepository.save(user));
