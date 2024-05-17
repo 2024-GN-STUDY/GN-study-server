@@ -20,7 +20,7 @@ public class UserController {
         return ResponseEntity.ok(userService.createUser(requestUserDto));
     }
 
-    @GetMapping("/signup/check-email")
+    @GetMapping("/check-email")
     public ResponseEntity<HttpStatus> getUserByEmail(@RequestParam("email") String email){
             Boolean isEmail = userService.checkEmail(email);
         return ResponseEntity.ok(isEmail ? HttpStatus.OK : HttpStatus.CONFLICT);

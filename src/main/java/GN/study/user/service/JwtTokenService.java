@@ -18,6 +18,7 @@ import java.util.concurrent.TimeUnit;
 
 @Service
 @RequiredArgsConstructor
+@Transactional(readOnly = true)
 public class JwtTokenService {
 
     private final JwtUtil jwtUtil;
@@ -63,10 +64,11 @@ public class JwtTokenService {
      * Redis 에서 토큰 삭제
      * @Param RefreshToken
      * */
-    public void deleteRefreshToken(String token){
+    public void deleteRefreshToken(String refreshToken){
         
         // 만료 안되어있으면 삭제
-        if(!jwtUtil.isTokenExpired(token)) redisRepository.deleteById(token);
+        if(!jwtUtil.isTokenExpired(refreshToken)) redisRepository.deleteById(refreshToken);
+
     }
 
 

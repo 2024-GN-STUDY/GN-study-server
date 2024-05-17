@@ -27,8 +27,9 @@ public class JwtRequestFilter  extends OncePerRequestFilter {
 
     // 로그인, 회원가입, 엑세스토큰 재발급
     private static final Set<String> SKIP_URIS = Set.of(
-            "/users/signup",
-            "/users/login",
+            "/api/v1/users",
+            "/api/v1/users/check-email",
+            "/api/v1/auth/login",
             "/refresh/token",
             "/h2-console",
             "/swagger-ui",
@@ -68,6 +69,7 @@ public class JwtRequestFilter  extends OncePerRequestFilter {
 
         //블랙리스트 인지 체크
         if(jwtTokenService.isTokenBlacklisted(token)){
+            filterChain.doFilter(request, response);
             return;
         }
 
