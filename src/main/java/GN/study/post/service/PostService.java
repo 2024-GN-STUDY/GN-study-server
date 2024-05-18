@@ -22,7 +22,7 @@ public class PostService {
     @Transactional
     public ResponsePostDto createPost(RequestPostDto requestPostDto){
 
-        User user = userService.findUser(requestPostDto.getUser_id());
+        User user = userService.findUser(requestPostDto.getUserId());
 
         Post post = postRepository.save(requestPostDto.toEntity(user));
 

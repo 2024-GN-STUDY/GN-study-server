@@ -1,6 +1,5 @@
 package GN.study.user.service;
 
-import GN.study.user.dto.service.UserDto;
 import GN.study.user.dto.signup.RequestUserSignUpDto;
 import GN.study.user.dto.signup.ResponseUserSignUpDto;
 import GN.study.user.entity.Address;
@@ -62,6 +61,10 @@ public class UserService {
 
     public User findUser(Long id){
         return userRepository.findById(id).orElseThrow(() -> new UserNotFoundException("USER NOT FOUND"));
+    }
+
+    public Long findUserIdByEmail(String email){
+        return userRepository.findByEmail(email).orElseThrow(() -> new UserNotFoundException("USER NOT FOUND")).getId();
     }
 
 }

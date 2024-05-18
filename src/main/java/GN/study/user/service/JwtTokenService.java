@@ -32,6 +32,8 @@ public class JwtTokenService {
     // AccessToken 관리
     private final RedisTemplate<String, Object> redisTemplate;
 
+    private final UserService userService;
+
     @Transactional
     public ResponseLoginDto createToken(RequestLoginDto requestLoginDto){
 
@@ -41,8 +43,11 @@ public class JwtTokenService {
 
             // authentication 객체에서 UserDetails 추출(사용자의 상세정보 포함)
             final UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+
+            final Long userId = userService.findUserIdByEmail(requestLoginDto.email);
+
             // JWT 토큰 생성
-            final String accessToken = jwtUtil.generateAccessToken(userDetails.getUsername());
+            final String accessToken = jwtUtil.generateAccessToken(userDetails.getUsername(), userId);
             final String refreshToken = jwtUtil.generateRefreshToken(userDetails.getUsername());
 
             redisRepository.save(new RefreshToken(refreshToken, userDetails.getUsername()));

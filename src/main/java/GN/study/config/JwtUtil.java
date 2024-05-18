@@ -21,8 +21,9 @@ public class JwtUtil {
      * @param email 유저 ID
      * @return 생성된 JWT token 문자열 반환
      */
-    public String generateAccessToken(String email) {
+    public String generateAccessToken(String email, Long userId) {
         return JWT.create()
+                .withClaim("user_id", userId)
                 .withSubject(email)                                                      // 토큰 주체, 사용자 이름
                 .withIssuedAt(new Date())                                                   // 토큰 발행 시간, 현재시간
                 .withExpiresAt(new Date(System.currentTimeMillis() + 1000 * 60 * 60))       // 1 hours 1000 * 60 * 60
@@ -57,10 +58,10 @@ public class JwtUtil {
     /**
      * 토큰 추출
      * @param token 토큰
-     * @return 토큰에서 추출한 만료시간
+     * @return 토큰에서 추출한 user_id
      * */
-    public Date extractExpiredDate(String token) {
-        return JWT.decode(token).getExpiresAt();
+    public Long extractUserId(String token) {
+        return JWT.decode(token).getClaim("user_id").asLong();
     }
     /**
      * 토큰 추출
