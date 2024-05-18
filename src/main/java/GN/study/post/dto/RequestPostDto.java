@@ -1,5 +1,7 @@
 package GN.study.post.dto;
 
+import GN.study.post.entity.Post;
+import GN.study.user.entity.User;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -15,5 +17,14 @@ public class RequestPostDto {
 
     private String contents;
 
-    private Long userId;
+    private Long user_id;
+
+
+    public Post toEntity(User user){
+        return Post.builder()
+                .subject(this.getSubject())
+                .contents(this.getContents())
+                .user(user)
+                .build();
+    }
 }
