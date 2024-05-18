@@ -5,8 +5,7 @@ import GN.study.post.dto.ResponsePostDto;
 import GN.study.post.entity.Post;
 import GN.study.post.repository.PostRepository;
 import GN.study.user.entity.User;
-import GN.study.user.exception.UserNotFoundException;
-import GN.study.user.repository.UserRepository;
+import GN.study.user.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -18,13 +17,12 @@ public class PostService {
 
     private final PostRepository postRepository;
 
-    private final UserRepository userRepository;
+    private final UserService userService;
 
     @Transactional
     public ResponsePostDto createPost(RequestPostDto requestPostDto){
 
-        User user = userRepository.findById(requestPostDto.getUser_id())
-                .orElseThrow(() -> new UserNotFoundException("USER NOT FOUND"));
+        User user = userService.findUser(requestPostDto.getUser_id());
 
         Post post = postRepository.save(requestPostDto.toEntity(user));
 

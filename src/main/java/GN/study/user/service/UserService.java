@@ -1,11 +1,13 @@
 package GN.study.user.service;
 
+import GN.study.user.dto.service.UserDto;
 import GN.study.user.dto.signup.RequestUserSignUpDto;
 import GN.study.user.dto.signup.ResponseUserSignUpDto;
 import GN.study.user.entity.Address;
 import GN.study.user.entity.Role;
 import GN.study.user.entity.User;
 import GN.study.user.exception.UserExistException;
+import GN.study.user.exception.UserNotFoundException;
 import GN.study.user.mapper.UserMapper;
 import GN.study.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -56,6 +58,10 @@ public class UserService {
         }
 
         return true;
+    }
+
+    public User findUser(Long id){
+        return userRepository.findById(id).orElseThrow(() -> new UserNotFoundException("USER NOT FOUND"));
     }
 
 }

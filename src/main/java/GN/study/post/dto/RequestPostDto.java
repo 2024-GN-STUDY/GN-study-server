@@ -2,6 +2,7 @@ package GN.study.post.dto;
 
 import GN.study.post.entity.Post;
 import GN.study.user.entity.User;
+import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -13,10 +14,12 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class RequestPostDto {
 
+    @NotBlank
     private String subject;
 
     private String contents;
 
+    @NotBlank
     private Long user_id;
 
 
