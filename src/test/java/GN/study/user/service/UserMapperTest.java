@@ -1,9 +1,7 @@
 package GN.study.user.service;
 
-import GN.study.user.dto.signup.RequestUserSignUpDto;
 import GN.study.user.dto.signup.ResponseUserSignUpDto;
 import GN.study.user.entity.Address;
-import GN.study.user.entity.Role;
 import GN.study.user.entity.User;
 import GN.study.user.mapper.UserMapper;
 import org.junit.jupiter.api.Test;
@@ -31,7 +29,6 @@ public class UserMapperTest {
                 .name("John Doe")
                 .password("password")
                 .email("john.doe@example.com")
-                .role(Role.USER)
                 .address(address)
                 .build();
 
