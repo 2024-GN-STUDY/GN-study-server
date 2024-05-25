@@ -55,7 +55,7 @@ public class JwtRequestFilter  extends OncePerRequestFilter {
 
         //블랙리스트 인지 체크
         if(jwtTokenService.isTokenBlacklisted(token)){
-            filterChain.doFilter(request, response);
+            response.sendError(HttpServletResponse.SC_UNAUTHORIZED);
             return;
         }
 
