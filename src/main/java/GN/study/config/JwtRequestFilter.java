@@ -47,17 +47,18 @@ public class JwtRequestFilter  extends OncePerRequestFilter {
         String username = jwtUtil.extractUsername(token);
         String type = jwtUtil.extractType(token);
 
+        //블랙리스트 인지 체크
+        if(jwtTokenService.isTokenBlacklisted(token)){
+            response.sendError(HttpServletResponse.SC_UNAUTHORIZED);
+            return;
+        }
+
         // 리프레시 토큰일 경우 검증 스킵
         if("refresh".equals(type)){
             filterChain.doFilter(request, response);
             return;
         }
 
-        //블랙리스트 인지 체크
-        if(jwtTokenService.isTokenBlacklisted(token)){
-            filterChain.doFilter(request, response);
-            return;
-        }
 
         // 엑세스토큰 의 경우 사용자 정보 검증
         if(username != null && SecurityContextHolder.getContext().getAuthentication() == null){
