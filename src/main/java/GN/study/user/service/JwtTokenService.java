@@ -48,7 +48,7 @@ public class JwtTokenService {
 
             // JWT 토큰 생성
             final String accessToken = jwtUtil.generateAccessToken(userDetails.getUsername(), userId);
-            final String refreshToken = jwtUtil.generateRefreshToken(userDetails.getUsername());
+            final String refreshToken = jwtUtil.generateRefreshToken(userDetails.getUsername(), userId);
 
             redisRepository.save(new RefreshToken(refreshToken, userDetails.getUsername()));
 

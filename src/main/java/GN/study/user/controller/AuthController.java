@@ -1,17 +1,22 @@
 package GN.study.user.controller;
 
+import GN.study.config.JwtUtil;
 import GN.study.user.dto.login.RequestLoginDto;
 import GN.study.user.dto.login.ResponseLoginDto;
+import GN.study.user.entity.User;
+import GN.study.user.exception.UserNotFoundException;
+import GN.study.user.repository.RedisRepository;
+import GN.study.user.repository.UserRepository;
 import GN.study.user.service.AuthService;
 import GN.study.user.token.RefreshToken;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/v1/auth")
@@ -19,6 +24,9 @@ import org.springframework.web.bind.annotation.*;
 public class AuthController {
 
     private final AuthService authService;
+    private final JwtUtil jwtUtil;
+    private final UserRepository userRepository;
+    private final RedisRepository redisRepository;
 
     @PostMapping("/login")
     public ResponseEntity<ResponseLoginDto> login(@Valid @RequestBody RequestLoginDto requestLoginDto, HttpServletResponse response) {
@@ -42,21 +50,53 @@ public class AuthController {
         return ResponseEntity.ok().build();
     }
 
-    @PostMapping("/logout")
-    public ResponseEntity<HttpStatus> logout(@RequestHeader("Authorization") String headerAccessToken, @RequestBody RefreshToken refreshToken){
 
-        String accessToken = "";
 
-        if(headerAccessToken != null && headerAccessToken.startsWith("Bearer ")){
-            accessToken = headerAccessToken.substring(7);
-            authService.logout(accessToken, refreshToken.getRefreshToken());
-        } else{
-            ResponseEntity.status(HttpStatus.UNAUTHORIZED);
+    /**
+     * refreshToken 재발급
+     *
+     * @param headerRefreshToken
+     * @return RefreshToken
+     */
+    @PostMapping("/refreshTokenReissuance")
+    public Optional<ResponseLoginDto> refreshTokenReissuance(@RequestHeader("Authorization") String headerRefreshToken, HttpServletResponse httpServletResponse) {
+
+        String newAccessToken = "";
+        String newRefreshToken = "";
+
+        //1.redis 에 리프레시 토큰이 있는지 없는지 체크
+        Optional<RefreshToken> isValidRefreshToken = authService.refreshTokenReissuance(headerRefreshToken);
+        if (isValidRefreshToken != null && !isValidRefreshToken.isEmpty()) {
+            String refreshToken = headerRefreshToken.substring(7);
+
+            Long userId = jwtUtil.extractUserId(refreshToken);
+            User user = userRepository.findById(userId).orElseThrow(() -> new UserNotFoundException("user not found"));
+
+            newAccessToken = jwtUtil.generateAccessToken(user.getEmail(), userId);
+            newRefreshToken = jwtUtil.generateRefreshToken(user.getEmail(), userId);
+
+            // 2. 엑세스 토큰 재발급
+            if (userId == user.getId()) {
+                // 쿠키에 넣어서 return, 기존꺼는 redis 삭제 처리
+                redisRepository.save(new RefreshToken(newRefreshToken, user.getName()));
+                redisRepository.deleteById(refreshToken);
+            }
+
+            // 쿠키 등록
+            // Access Token을 일반 쿠키로 설정
+            Cookie accessTokenCookie = new Cookie("Access-Token", newAccessToken);
+            accessTokenCookie.setMaxAge(60 * 60); // 1시간
+            accessTokenCookie.setHttpOnly(false); // 클라이언트 스크립트에서 접근 가능
+            accessTokenCookie.setPath("/"); // 경로 설정
+            httpServletResponse.addCookie(accessTokenCookie);
+
+            // Refresh Token을 HttpOnly 쿠키로 설정
+            Cookie refreshTokenCookie = new Cookie("Refresh-Token", newRefreshToken);
+            refreshTokenCookie.setMaxAge(3 * 24 * 60 * 60); // 1주일
+            refreshTokenCookie.setHttpOnly(true); // 클라이언트 스크립트에서 접근 불가능
+            refreshTokenCookie.setPath("/"); // 경로 설정
+            httpServletResponse.addCookie(refreshTokenCookie);
         }
-
-        SecurityContextHolder.clearContext();
-
-        return ResponseEntity.ok(HttpStatus.OK);
+        return Optional.of(new ResponseLoginDto(newAccessToken, newRefreshToken));
     }
-
 }

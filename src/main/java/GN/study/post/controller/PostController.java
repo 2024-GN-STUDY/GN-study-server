@@ -4,14 +4,13 @@ import GN.study.config.JwtUtil;
 import GN.study.post.dto.RequestPostDto;
 import GN.study.post.service.PostService;
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/v1/post")
@@ -36,5 +35,7 @@ public class PostController {
 
         return ResponseEntity.ok().body(postService.createPost(requestPostDto));
     }
+
+
 
 }
