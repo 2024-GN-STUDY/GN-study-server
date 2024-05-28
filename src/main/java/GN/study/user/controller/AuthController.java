@@ -13,6 +13,8 @@ import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.ResponseCookie;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -59,7 +61,7 @@ public class AuthController {
      * @return RefreshToken
      */
     @PostMapping("/refreshTokenReissuance")
-    public Optional<ResponseLoginDto> refreshTokenReissuance(@RequestHeader("Authorization") String headerRefreshToken, HttpServletResponse httpServletResponse) {
+    public ResponseEntity<ResponseLoginDto> refreshTokenReissuance(@RequestHeader("Authorization") String headerRefreshToken, HttpServletResponse httpServletResponse) {
 
         String newAccessToken = "";
         String newRefreshToken = "";
@@ -82,21 +84,25 @@ public class AuthController {
                 redisRepository.deleteById(refreshToken);
             }
 
-            // 쿠키 등록
-            // Access Token을 일반 쿠키로 설정
-            Cookie accessTokenCookie = new Cookie("Access-Token", newAccessToken);
-            accessTokenCookie.setMaxAge(60 * 60); // 1시간
-            accessTokenCookie.setHttpOnly(false); // 클라이언트 스크립트에서 접근 가능
-            accessTokenCookie.setPath("/"); // 경로 설정
-            httpServletResponse.addCookie(accessTokenCookie);
+            ResponseLoginDto responseLoginDto = new ResponseLoginDto(newAccessToken, newRefreshToken);
 
-            // Refresh Token을 HttpOnly 쿠키로 설정
-            Cookie refreshTokenCookie = new Cookie("Refresh-Token", newRefreshToken);
-            refreshTokenCookie.setMaxAge(3 * 24 * 60 * 60); // 1주일
-            refreshTokenCookie.setHttpOnly(true); // 클라이언트 스크립트에서 접근 불가능
-            refreshTokenCookie.setPath("/"); // 경로 설정
-            httpServletResponse.addCookie(refreshTokenCookie);
+            ResponseCookie accessCookie = ResponseCookie.from("Access-Token", responseLoginDto.getAccessToken())
+                    .maxAge(60 * 60)
+                    .httpOnly(false)
+                    .path("/")
+                    .build();
+
+            ResponseCookie refreshCookie = ResponseCookie.from("Refresh-Token", responseLoginDto.getRefreshToken())
+                    .maxAge(3 * 24 * 60 * 60)
+                    .httpOnly(true)
+                    .path("/")
+                    .build();
+
+            return ResponseEntity.ok()
+                    .header(HttpHeaders.SET_COOKIE, accessCookie.toString())
+                    .header(HttpHeaders.SET_COOKIE, refreshCookie.toString())
+                    .body(responseLoginDto);
         }
-        return Optional.of(new ResponseLoginDto(newAccessToken, newRefreshToken));
+        return ResponseEntity.badRequest().build();
     }
 }
