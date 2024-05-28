@@ -13,6 +13,8 @@ import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.ResponseCookie;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -29,25 +31,28 @@ public class AuthController {
     private final RedisRepository redisRepository;
 
     @PostMapping("/login")
-    public ResponseEntity<ResponseLoginDto> login(@Valid @RequestBody RequestLoginDto requestLoginDto, HttpServletResponse response) {
+    public ResponseEntity<ResponseLoginDto> login(@Valid @RequestBody RequestLoginDto requestLoginDto) {
 
         ResponseLoginDto responseLoginDto = authService.login(requestLoginDto);
 
-        // Access Token을 일반 쿠키로 설정
-        Cookie accessTokenCookie = new Cookie("Access-Token", responseLoginDto.getAccessToken());
-        accessTokenCookie.setMaxAge(60 * 60); // 1시간
-        accessTokenCookie.setHttpOnly(false); // 클라이언트 스크립트에서 접근 가능
-        accessTokenCookie.setPath("/"); // 경로 설정
-        response.addCookie(accessTokenCookie);
+        // Access Token을 일반 쿠키로 설정      HttpServeltResponse -> Header 로 변경
+        ResponseCookie accessTokenCookie = ResponseCookie.from("Access-Token", responseLoginDto.getAccessToken())
+                .maxAge(60 * 60)
+                .httpOnly(false)
+                .path("/")
+                .build();
 
-        // Refresh Token을 HttpOnly 쿠키로 설정
-        Cookie refreshTokenCookie = new Cookie("Refresh-Token", responseLoginDto.getRefreshToken());
-        refreshTokenCookie.setMaxAge(3 * 24 * 60 * 60); // 1주일
-        refreshTokenCookie.setHttpOnly(true); // 클라이언트 스크립트에서 접근 불가능
-        refreshTokenCookie.setPath("/"); // 경로 설정
-        response.addCookie(refreshTokenCookie);
+        // Refresh Token을 HttpOnly 쿠키로 설정  HttpServeltResponse -> Header 로 변경
+        ResponseCookie refreshTokenCookie = ResponseCookie.from("Refresh-Token", responseLoginDto.getRefreshToken())
+                .maxAge(3 * 24 * 60 * 60)
+                .httpOnly(true)
+                .path("/")
+                .build();
 
-        return ResponseEntity.ok().build();
+        return ResponseEntity.ok()
+                .header(HttpHeaders.SET_COOKIE, accessTokenCookie.toString())
+                .header(HttpHeaders.SET_COOKIE, refreshTokenCookie.toString())
+                .body(new ResponseLoginDto(responseLoginDto.accessToken, responseLoginDto.refreshToken));
     }
 
 
