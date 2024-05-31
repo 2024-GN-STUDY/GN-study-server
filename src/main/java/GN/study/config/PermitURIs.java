@@ -21,7 +21,9 @@ public class PermitURIs {
             "/api/v1/users/check-email?**",
             "/api/v1/users/check-email",
             "/swagger-config",
-            "/error"
+            "/error",
+            "/shorted/**",
+            "/shorted"
     );
 
     // Security 설정에서 사용할 배열

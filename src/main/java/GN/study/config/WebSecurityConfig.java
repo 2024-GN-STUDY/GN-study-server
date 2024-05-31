@@ -28,7 +28,8 @@ public class WebSecurityConfig {
     @Bean
     @ConditionalOnProperty(name = "spring.h2.console.enalbed", havingValue = "true")
     public WebSecurityCustomizer webSecurityCustomizer() { // h2
-        return web -> web.ignoring().requestMatchers(PathRequest.toH2Console());
+        return web -> web.ignoring().requestMatchers(PathRequest.toH2Console())
+                .requestMatchers("/shorted/");
     }
 
     @Bean
