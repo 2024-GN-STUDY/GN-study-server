@@ -42,7 +42,7 @@ public class UrlService {
 
             ShortenUrl shortenUrl = ShortenUrl.builder()
                     .origin_url(origin_url)
-                    .shorten_url("http://localhost:8083/" + shortedUrl)
+                    .shorten_url(shortedUrl)
                     .build();
 
             ShortenUrl shortenUrlOptional = urlRepository.save(shortenUrl);
