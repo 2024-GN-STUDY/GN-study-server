@@ -36,7 +36,6 @@ public class UrlTest {
         // given
         String url = "www.google.com";
 
-
         // when
         MessageDigest messageDigest = MessageDigest.getInstance("SHA-256");
 
@@ -88,7 +87,6 @@ public class UrlTest {
         // when
         ResponseUrl responseUrl = urlService.createShortenUrl(requestUrl);
 
-
         List<ShortenUrl> s = urlRepository.findAll();
 
         ShortenUrl shortenUrl = urlRepository.findById(1L).get();
@@ -97,4 +95,27 @@ public class UrlTest {
         // then
         Assertions.assertEquals(shortenUrl.getShortenUrl(), shortenUrl1.getShortenUrl());
     }
+    @Test
+    public void shortedTest3000000() throws Exception{
+
+        for(int i=1; i<3000000; i++){
+
+            // given
+            RequestUrl requestUrl = RequestUrl.builder()
+                    .originUrl("https://www.google.com/"+i)
+                    .build();
+
+            // when
+            ResponseUrl responseUrl = urlService.createShortenUrl(requestUrl);
+
+            ShortenUrl shortenUrl = urlRepository.findById((long)i).get();
+            ShortenUrl shortenUrl1 = urlRepository.findByShortenUrl(responseUrl.getShortedUrl()).orElseThrow(RuntimeException::new);
+
+            // then
+            System.out.print("i = " + i);
+            Assertions.assertEquals(shortenUrl.getShortenUrl(), shortenUrl1.getShortenUrl());
+        }
+    }
+
+
 }

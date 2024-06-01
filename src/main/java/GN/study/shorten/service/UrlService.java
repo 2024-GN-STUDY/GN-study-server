@@ -74,7 +74,6 @@ public class UrlService {
         byte[] shortedHashedBytes = Arrays.copyOfRange(hashedBytes, 0, 8);
 
         String strHash = new String(base62.encode(shortedHashedBytes), StandardCharsets.UTF_8);
-        String result = "";
 
         for(int i=0; i<5; i++){
                 Optional<ShortenUrl> findShortedUrl = urlRepository.findByShortenUrl(strHash);
