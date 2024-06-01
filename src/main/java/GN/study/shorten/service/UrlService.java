@@ -6,6 +6,7 @@ import GN.study.shorten.entity.ShortenUrl;
 import GN.study.shorten.repository.UrlRepository;
 import io.seruco.encoding.base62.Base62;
 import lombok.RequiredArgsConstructor;
+import org.apache.commons.lang3.RandomStringUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -70,8 +71,21 @@ public class UrlService {
     public String generatedShortCode(String origin_url) throws NoSuchAlgorithmException {
         MessageDigest messageDigest = MessageDigest.getInstance("SHA-256");
         byte[] hashedBytes = messageDigest.digest(origin_url.getBytes(StandardCharsets.UTF_8));
-        byte[] shotedHashedBytes = Arrays.copyOfRange(hashedBytes, 0, 8);
+        byte[] shortedHashedBytes = Arrays.copyOfRange(hashedBytes, 0, 8);
 
-        return new String(base62.encode(shotedHashedBytes), StandardCharsets.UTF_8);
+        String strHash = new String(base62.encode(shortedHashedBytes), StandardCharsets.UTF_8);
+        String result = "";
+
+        for(int i=0; i<5; i++){
+                Optional<ShortenUrl> findShortedUrl = urlRepository.findByShortenUrl(strHash);
+
+                if(findShortedUrl.isEmpty()){
+                    return strHash;
+                }
+
+                strHash = new String(base62.encode(shortedHashedBytes), StandardCharsets.UTF_8) + RandomStringUtils.randomAlphanumeric(1);
+        }
+
+        throw new IllegalStateException("Can't generated Unique Address");
     }
 }
